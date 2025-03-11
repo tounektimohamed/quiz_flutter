@@ -30,62 +30,133 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Paramètres du Quiz'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Sélection de la catégorie
-            DropdownButtonFormField<String>(
-              value: selectedCategory,
-              hint: const Text('Choisissez une catégorie'),
-              items: categories.map((category) {
-                return DropdownMenuItem(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedCategory = value;
-                });
-              },
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Catégorie',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: selectedCategory,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                      ),
+                      hint: const Text('Choisissez une catégorie'),
+                      items: categories.map((category) {
+                        return DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCategory = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
 
             // Sélection de la difficulté
-            DropdownButtonFormField<String>(
-              value: selectedDifficulty,
-              hint: const Text('Choisissez la difficulté'),
-              items: difficulties.map((difficulty) {
-                return DropdownMenuItem(
-                  value: difficulty,
-                  child: Text(difficulty),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedDifficulty = value;
-                });
-              },
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Difficulté',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: selectedDifficulty,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                      ),
+                      hint: const Text('Choisissez la difficulté'),
+                      items: difficulties.map((difficulty) {
+                        return DropdownMenuItem(
+                          value: difficulty,
+                          child: Text(difficulty),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedDifficulty = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
 
             // Sélection du nombre de questions
-            DropdownButtonFormField<int>(
-              value: selectedNumberOfQuestions,
-              hint: const Text('Choisissez le nombre de questions'),
-              items: numberOfQuestions.map((number) {
-                return DropdownMenuItem(
-                  value: number,
-                  child: Text('$number questions'),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedNumberOfQuestions = value;
-                });
-              },
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Nombre de questions',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<int>(
+                      value: selectedNumberOfQuestions,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                      ),
+                      hint: const Text('Choisissez le nombre de questions'),
+                      items: numberOfQuestions.map((number) {
+                        return DropdownMenuItem(
+                          value: number,
+                          child: Text('$number questions'),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedNumberOfQuestions = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 40),
 
@@ -109,11 +180,21 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Veuillez sélectionner tous les paramètres.'),
+                      backgroundColor: Colors.red,
                     ),
                   );
                 }
               },
-              child: const Text('Commencer le quiz'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Commencer le quiz',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),
