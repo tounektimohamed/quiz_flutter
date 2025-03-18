@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:quiz_ala/screens/theme_provider.dart'; // Importez ThemeProvider
-import '../localization/localization.dart'; // Gestion de la langue
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -10,7 +9,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final localization = Localization.of(context);
+    final localizationProvider = Provider.of<LocalizationProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -47,27 +46,31 @@ class SettingsScreen extends StatelessWidget {
               child: ListTile(
                 leading: const Icon(Icons.language, color: Colors.blueAccent),
                 title: const Text('Langue'),
-                trailing: DropdownButton<String>(
-                  value: localization.locale.languageCode,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      localization.setLocale(Locale(newValue));
-                    }
+                trailing: Consumer<LocalizationProvider>(
+                  builder: (context, localizationProvider, child) {
+                    return DropdownButton<String>(
+                      value: localizationProvider.locale.languageCode,
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          localizationProvider.setLocale(Locale(newValue));
+                        }
+                      },
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'fr',
+                          child: Text('Français'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text('English'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'ar',
+                          child: Text('العربية'),
+                        ),
+                      ],
+                    );
                   },
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'fr',
-                      child: Text('Français'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'en',
-                      child: Text('English'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'ar',
-                      child: Text('العربية'),
-                    ),
-                  ],
                 ),
               ),
             ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.5),
@@ -75,5 +78,20 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+
+
+class LocalizationProvider with ChangeNotifier {
+  Locale _locale = const Locale('fr');
+
+  Locale get locale => _locale;
+
+  void setLocale(Locale newLocale) {
+    if (_locale != newLocale) {
+      _locale = newLocale;
+      notifyListeners();
+    }
   }
 }

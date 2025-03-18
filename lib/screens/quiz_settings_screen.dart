@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quiz_ala/screens/settings_screen.dart';
 import 'quiz_screen.dart'; // Pour naviguer vers l'écran du quiz
 
 class QuizSettingsScreen extends StatefulWidget {
@@ -9,27 +11,41 @@ class QuizSettingsScreen extends StatefulWidget {
 }
 
 class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
-  String? selectedCategory;
-  String? selectedDifficulty;
+  Map<String, dynamic>? selectedCategory;
+  Map<String, dynamic>? selectedDifficulty;
   int? selectedNumberOfQuestions;
 
-  // Exemple de catégories (à remplacer par les données de l'API OpenTDB)
-  final List<String> categories = [
-    'Sciences',
-    'Histoire',
-    'Divertissement',
-    'Géographie',
-    'Art',
+  // Catégories avec traductions et IDs pour l'API
+  final List<Map<String, dynamic>> categories = [
+    {'id': 17, 'name': 'Sciences', 'en': 'Science', 'ar': 'العلوم'},
+    {'id': 23, 'name': 'Histoire', 'en': 'History', 'ar': 'التاريخ'},
+    {'id': 11, 'name': 'Divertissement', 'en': 'Entertainment', 'ar': 'الترفيه'},
+    {'id': 22, 'name': 'Géographie', 'en': 'Geography', 'ar': 'الجغرافيا'},
+    {'id': 25, 'name': 'Art', 'en': 'Art', 'ar': 'الفن'},
   ];
 
-  final List<String> difficulties = ['Facile', 'Moyen', 'Difficile'];
+  // Difficultés avec traductions et valeurs pour l'API
+  final List<Map<String, dynamic>> difficulties = [
+    {'name': 'Facile', 'apiValue': 'easy', 'en': 'Easy', 'ar': 'سهل'},
+    {'name': 'Moyen', 'apiValue': 'medium', 'en': 'Medium', 'ar': 'متوسط'},
+    {'name': 'Difficile', 'apiValue': 'hard', 'en': 'Hard', 'ar': 'صعب'},
+  ];
+
+  // Nombre de questions
   final List<int> numberOfQuestions = [5, 10, 15, 20];
 
   @override
   Widget build(BuildContext context) {
+    final localizationProvider = Provider.of<LocalizationProvider>(context);
+    final locale = localizationProvider.locale.languageCode;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Paramètres du Quiz'),
+        title: Text(locale == 'fr'
+            ? 'Paramètres du Quiz'
+            : locale == 'en'
+                ? 'Quiz Settings'
+                : 'إعدادات الاختبار'),
         centerTitle: true,
       ),
       body: Padding(
@@ -45,12 +61,17 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Catégorie',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    Text(
+                      locale == 'fr'
+                          ? 'Catégorie'
+                          : locale == 'en'
+                              ? 'Category'
+                              : 'الفئة',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
+                    DropdownButtonFormField<Map<String, dynamic>>(
                       value: selectedCategory,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -59,11 +80,15 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                         filled: true,
                         fillColor: Colors.grey[200],
                       ),
-                      hint: const Text('Choisissez une catégorie'),
+                      hint: Text(locale == 'fr'
+                          ? 'Choisissez une catégorie'
+                          : locale == 'en'
+                              ? 'Choose a category'
+                              : 'اختر فئة'),
                       items: categories.map((category) {
                         return DropdownMenuItem(
                           value: category,
-                          child: Text(category),
+                          child: Text(category[locale] ?? category['name']),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -86,12 +111,17 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Difficulté',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    Text(
+                      locale == 'fr'
+                          ? 'Difficulté'
+                          : locale == 'en'
+                              ? 'Difficulty'
+                              : 'الصعوبة',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
+                    DropdownButtonFormField<Map<String, dynamic>>(
                       value: selectedDifficulty,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -100,11 +130,15 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                         filled: true,
                         fillColor: Colors.grey[200],
                       ),
-                      hint: const Text('Choisissez la difficulté'),
+                      hint: Text(locale == 'fr'
+                          ? 'Choisissez la difficulté'
+                          : locale == 'en'
+                              ? 'Choose the difficulty'
+                              : 'اختر الصعوبة'),
                       items: difficulties.map((difficulty) {
                         return DropdownMenuItem(
                           value: difficulty,
-                          child: Text(difficulty),
+                          child: Text(difficulty[locale] ?? difficulty['name']),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -127,9 +161,14 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Nombre de questions',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    Text(
+                      locale == 'fr'
+                          ? 'Nombre de questions'
+                          : locale == 'en'
+                              ? 'Number of questions'
+                              : 'عدد الأسئلة',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     DropdownButtonFormField<int>(
@@ -141,7 +180,11 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                         filled: true,
                         fillColor: Colors.grey[200],
                       ),
-                      hint: const Text('Choisissez le nombre de questions'),
+                      hint: Text(locale == 'fr'
+                          ? 'Choisissez le nombre de questions'
+                          : locale == 'en'
+                              ? 'Choose the number of questions'
+                              : 'اختر عدد الأسئلة'),
                       items: numberOfQuestions.map((number) {
                         return DropdownMenuItem(
                           value: number,
@@ -170,16 +213,20 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => QuizScreen(
-                        category: selectedCategory!,
-                        difficulty: selectedDifficulty!,
+                        category: selectedCategory!['id'].toString(),
+                        difficulty: selectedDifficulty!['apiValue'],
                         numberOfQuestions: selectedNumberOfQuestions!,
                       ),
                     ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Veuillez sélectionner tous les paramètres.'),
+                    SnackBar(
+                      content: Text(locale == 'fr'
+                          ? 'Veuillez sélectionner tous les paramètres.'
+                          : locale == 'en'
+                              ? 'Please select all settings.'
+                              : 'الرجاء تحديد جميع الإعدادات.'),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -191,9 +238,13 @@ class _QuizSettingsScreenState extends State<QuizSettingsScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                'Commencer le quiz',
-                style: TextStyle(fontSize: 18),
+              child: Text(
+                locale == 'fr'
+                    ? 'Commencer le quiz'
+                    : locale == 'en'
+                        ? 'Start the quiz'
+                        : 'بدء الاختبار',
+                style: const TextStyle(fontSize: 18),
               ),
             ),
           ],

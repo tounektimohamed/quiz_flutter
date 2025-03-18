@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_ala/screens/home_screen.dart';
+import 'package:quiz_ala/screens/settings_screen.dart';
 import 'package:quiz_ala/services/notification_service.dart';
 import 'package:quiz_ala/screens/theme_provider.dart';
 import 'package:quiz_ala/localization/localization.dart'; // Importez Localization
@@ -13,9 +14,12 @@ void main() async {
   final notificationService = NotificationService();
   await notificationService.init();
 
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(), // Fournir ThemeProvider
+ runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => LocalizationProvider()),
+      ],
       child: const MyApp(),
     ),
   );
